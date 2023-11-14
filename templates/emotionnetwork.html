@@ -1,0 +1,193 @@
+<!--
+ * @Description: 
+ * @Author: Junwen Yang
+ * @Date: 2023-11-06 10:33:16
+ * @LastEditTime: 2023-11-13 06:36:25
+ * @LastEditors: Junwen Yang
+-->
+<!--
+ * @Description: 
+ * @Author: Junwen Yang
+ * @Date: 2023-11-06 10:33:16
+ * @LastEditTime: 2023-11-06 16:11:14
+ * @LastEditors: Junwen Yang
+-->
+<!--
+ * @Description: 
+ * @Author: Junwen Yang
+ * @Date: 2023-11-06 10:33:16
+ * @LastEditTime: 2023-11-06 15:51:01
+ * @LastEditors: Junwen Yang
+-->
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="/static/scripts/main.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Node Importance Analysis</title>
+    <link rel="stylesheet" href="../static/styles/main.css">
+    <style>
+
+        .sidebar {
+            width: 250px;
+            position:absolute;
+            top: 0;
+            left: -250px; /* Hide sidebar */
+            height: 100%;
+            background: #333;
+            overflow-x: hidden;
+            transition: 0.5s; /* Smooth transition */
+            padding-top: 60px;
+        }
+        .sidebar:hover {
+            left: 0; /* Show sidebar on hover */
+        }
+        .menu-icon {
+            cursor: pointer;
+            position: fixed;
+            margin-left: 30vh;
+            transition: 0.5s;
+            margin-top: -1vh;
+            top: 20px;
+            left: 10px;
+            width: 40px;
+            height: 40px;
+            /* background: url('path/to/menu-icon.png') no-repeat center center; */
+            /* background-size: cover; */
+        }
+        .menu-icon.open {
+            left: -250px; /* Move to the right by the width of the sidebar */
+        }
+        /* Add padding to the body to make space for the fixed menu icon */
+        body {
+            
+            padding-top: 60px;
+
+            
+        }
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 20px;
+        }
+        .bg {
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions for hover effects */
+        }
+
+        .bg:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .content-section {
+            margin: 20px 0;
+            max-width: 800px; /* Optimal line length for readability */
+            text-align: justify;
+            padding: 50px;
+            margin-left: 200px;
+        }
+
+        .content-section h2 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .content-section p {
+            font-size: 1rem;
+            line-height: 1.6; /* For readability */
+        }
+
+        /* Title Styles */
+        h1 {
+            font-family: 'Roboto', sans-serif; /* This is a modern and clean font */
+            font-weight: 700; /* Make it bold */
+            font-size: 2.5em; /* Increase the size */
+            color: #333; /* Dark grey color */
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2); /* Subtle text shadow for depth */
+            animation: fadeInDown 2s ease-out;
+            margin-bottom: 0.5em;
+            margin-left: 200px;
+        }
+
+        /* Keyframes for the title animation */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translate3d(0, -100%, 0);
+            }
+            to {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    
+    <nav id="sidebar", class="sidebar">
+        
+        <ul>
+            <li><a href="/crawl-information">Crawl Information</a>
+                <ul>
+                    <li><a href="/search_weibo">Search Weibo</a></li>
+                    
+                </ul>
+            </li>
+            <li><a href="/dissemination-network">Dissemination Network</a>
+                <ul>
+                    <li><a href="/edgesdata">Edges Data</a></li>
+                    <li><a href="/nettopo">Network Topo</a></li>
+                </ul>
+                
+            </li>
+            <li><a href="/key-spreader-analysis">Key Spreader Analysis</a>
+                <ul>
+                    <li><a href="/degree">Degree</a></li>
+                    <li><a href="/betweenness">Betweenness</a></li>
+                    <li><a href="/closeness">Closeness</a></li>
+                    <li><a href="/centripetal">Centripetal</a></li>
+                    <li><a href="/top10">Top Nodes Simulate</a></li>
+                </ul>
+            </li>
+            <li><a href="/emotionnetwork">Emotion Analysis</a>
+                <ul>
+                    <li><a href="/sentimentanalysis">Emotion Analysis</a></li>
+                    <li><a href="/sentimentspread">Emotion Spread</a></li>
+                    
+        </ul>
+    </nav>
+    
+    <main>
+        <!-- Main Title -->
+        <h1>Emotion Analysis</h1>
+        <div class="menu-icon" onclick="toggleSidebar() ">&#9776;MENU</div>
+        
+        <!-- Section: Degree Centrality -->
+        <div class="bg content-section">
+            <h2>Sentiment Analysis</h2>
+            <p>根据前面所获取的转发微博的文本内容，我们对其进行情感分析，采用 cnsenti 方法对语句进行分词，并提取出其中的积极词汇和消极词汇，包括副词对形容词的作用关系。通过对比正面情感和负面情感的占比，我们可以简略地为一条微博设置情感得分，进而观察传播过程中情感地变化情况。</p>
+        </div>
+
+        <!-- Section: Information Crawling -->
+        <div class="bg content-section">
+            <h2>Sentiment Spread Topo</h2>
+            <p>基于已经生成的网络拓扑和情感得分，我们可以对节点赋予不同的情感权重，并依据权重在网络拓扑图中对节点实行染色。本部分直观地展示网络中用户的情感差异和关系。</p>
+        </div>
+        
+        <!-- Additional sections can be added here -->
+    </main>
+    
+    <script src="scripts/main.js"></script>
+</body>
+</html>

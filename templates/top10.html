@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <script src="/static/scripts/top10.js"></script>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Centripetal Centrality</title>
+        <link rel="stylesheet" href="../static/styles/top10.css">
+        <style>
+            .echarts-container {
+                margin-top: 200px;
+                position:absolute;
+                display: grid;
+                grid-template-columns: repeat(8, 1fr); /* 2列布局 */
+                grid-gap: 0px; /* 网格间距 */
+                padding: 20px; /* 容器内边距 */
+            }
+            .simu-button {
+                position: absolute;
+                background: linear-gradient(45deg, #ed786d, #2193b0);
+                color: white;
+                border: none;
+                padding: 10px;
+                width: 300px;
+                margin: 0 5px;
+                margin-left: 20px;
+                margin-top: 650px;
+                border-radius: 5px;
+                /* border: 1px solid #ccc; */
+                background-color: white;
+                transition: all 0.3s ease;
+                box-shadow: 0 5px 10px #454444; /* 按钮阴影 */
+            }
+            .simu-button:hover {
+                box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+                cursor: pointer;
+                box-shadow: 0 5px 10px #656464; /* 按钮阴影 */
+            }
+            .chart {
+                width: 250px;
+                height: 200px; /* 图表高度 */
+                border: 2px solid #3f3d3d; /* 图表边框 */
+                box-shadow:  0 5px 10px #828181; /* 图表阴影 */
+            }
+            
+            .chart-btn {
+                width: 160px;
+                height: 30px;
+                padding: 10px;
+                margin-left: -205px;
+                margin-top: 220px; /* 按钮与图表间距 */
+                border: none;
+                border-radius: 5px;
+                background: linear-gradient(45deg, #396896, #b82d5b);
+                color: white;
+                cursor: pointer;
+                box-shadow: 0 5px 10px #454444; /* 按钮阴影 */
+            }
+            .chart-btn:hover {
+                box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+                cursor: pointer;
+                box-shadow: 0 5px 10px #a09a9a; /* 按钮阴影 */
+            }
+            
+            #main2 {
+                
+                position: absolute;
+                width: 100%;
+                height: 605px; /* 可以根据需要调整高度 */
+                width: 1305px;
+                margin-left: 0px;
+                margin-right: 0px;
+                margin-top: 780px;
+                border: 1.5px solid #141414;
+            }
+            #main {
+            width: 100%;
+            height: 610px; /* 可以根据需要调整高度 */
+            width: 650px;
+            margin-left: 650px;
+            margin-top: -610px;
+            border: 2px solid #141414;
+        }
+            .sidebar {
+                width: 250px;
+                position: fixed;
+                top: 0;
+                left: -250px; /* Hide sidebar */
+                height: 100%;
+                background: #333;
+                overflow-x: hidden;
+                transition: 0.5s; /* Smooth transition */
+                padding-top: 60px;
+            }
+            .sidebar:hover {
+                left: 0; /* Show sidebar on hover */
+            }
+            .menu-icon {
+                cursor: pointer;
+                position: absolute;
+                margin-left: 30vh;
+                transition: 0.5s;
+                margin-top: -1vh;
+                top: 20px;
+                left: 10px;
+                width: 40px;
+                height: 40px;
+                /* background: url('path/to/menu-icon.png') no-repeat center center; */
+                /* background-size: cover; */
+            }
+            .menu-icon.open {
+                left: -250px; /* Move to the right by the width of the sidebar */
+            }
+            /* Add padding to the body to make space for the fixed menu icon */
+            body {
+                padding-top: 60px;
+            }
+
+            
+        </style>
+    </head>
+    <body>
+        <nav id="sidebar", class="sidebar">
+            <ul>
+                <li><a href="/crawl-information">Crawl Information</a>
+                    <ul>
+                        <li><a href="/search_weibo">Search Weibo</a></li>
+                        
+                    </ul>
+                </li>
+                <li><a href="/dissemination-network">Dissemination Network</a>
+                    <ul>
+                        <li><a href="/edgesdata">Edges Data</a></li>
+                        <li><a href="/nettopo">Network Topo</a></li>
+                    </ul>
+                    
+                </li>
+                <li><a href="/key-spreader-analysis">Key Spreader Analysis</a>
+                    <ul>
+                        <li><a href="/degree">Degree</a></li>
+                        <li><a href="/betweenness">Betweenness</a></li>
+                        <li><a href="/closeness">Closeness</a></li>
+                        <li><a href="/centripetal">Centripetal</a></li>
+                        <li><a href="/top10">Top Nodes Simulate</a></li>
+                    </ul>
+                </li>
+                <li><a href="/emotionnetwork">Emotion Analysis</a>
+                    <ul>
+                        <li><a href="/sentimentanalysis">Emotion Analysis</a></li>
+                        <li><a href="/sentimentspread">Emotion Spread</a></li>
+            </ul>
+        </nav>
+    
+        <div class="menu-icon" onclick="toggleSidebar() ">&#9776;MENU</div>
+    <div id="input-content">
+        <div id="search-container">
+            <p>Please input the Weibo ID (e.g. 4967376346942041):</p>
+            <input type="text" id="search-input" style="width:200%;">
+             <!-- 添加的选项框和按钮 -->
+        <div id="options-container">
+            <select id="seed-number">
+                <!-- 1到20的数字 -->
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10" selected="selected">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="15">15</option>
+                <option value="16">16</option>
+                <option value="17">17</option>
+                <option value="18">18</option>
+                <option value="19">19</option>
+                <option value="20" >20</option>
+            </select>
+
+            <select id="network-name">
+                <!-- 网络名称 -->
+                <option value="stormofswords">stormofswords</option>
+                <option value="blogs">blogs</option>
+                <option value="email">email</option>
+            </select>
+
+            <select id="infection-rate">
+                <!-- 感染率 -->
+                <option value="0.05">0.05</option>
+                <option value="0.10">0.10</option>
+                <option value="0.15">0.15</option>
+                <option value="0.20", selected="selected">0.20</option>
+                <option value="0.25">0.25</option>
+                <option value="0.30">0.30</option>
+                <option value="0.35">0.35</option>
+                <option value="0.40">0.40</option>
+                <option value="0.45">0.45</option>
+                <option value="0.50">0.50</option>
+            </select>
+
+            <select id="recovery-rate">
+                <!-- 恢复率 -->
+                <option value="0.05">0.05</option>
+                <option value="0.10">0.10</option>
+                <option value="0.15">0.15</option>
+                <option value="0.20", selected="selected">0.20</option>
+                <option value="0.25">0.25</option>
+                <option value="0.30">0.30</option>
+                <option value="0.35">0.35</option>
+                <option value="0.40">0.40</option>
+                <option value="0.45">0.45</option>
+                <option value="0.50">0.50</option>
+            </select>
+
+            
+
+        </div>
+    
+    <div id="controls">
+        <div id="network-description" style="margin-left: 0px; margin-top: 60px;position: absolute;">
+            <p style="font-size: 20px; color: #333; font-weight: bold;">TOP节点可视化</p>
+            <p style="font-size: 14px; color: #555;">在上方选择网络名称，感染率，恢复率，点击对应的Baseline按钮，即可将选定网络的Top-K节点可视化。这里我们将最高分值的前K个节点染红色，用于观察不同方法选择的高分节点有何差异。</p>
+        </div>
+        <div class="echarts-container">
+            
+            <div id="dc-chart" class="chart"></div>
+            <script src="https://assets.pyecharts.org/assets/echarts.min.js"></script>
+            <script src="/static/scripts/top10.js"></script>
+            <button class="chart-btn" id="dc-btn">DC TOP</button>
+        
+            <div id="bc-chart" class="chart"></div>
+            <script src="https://assets.pyecharts.org/assets/echarts.min.js"></script>
+            <script src="/static/scripts/top10.js"></script>
+            <button class="chart-btn" id="bc-btn">BC TOP</button>
+        
+            <div id="cc-chart" class="chart"></div>
+            <script src="https://assets.pyecharts.org/assets/echarts.min.js"></script>
+            <script src="/static/scripts/top10.js"></script>
+            <button class="chart-btn" id="cc-btn">CC TOP</button>
+        
+            <div id="cenc-chart" class="chart"></div>
+            <script src="https://assets.pyecharts.org/assets/echarts.min.js"></script>
+            <script src="/static/scripts/top10.js"></script>
+            <button class="chart-btn" id="cenc-btn">CENC TOP</button>
+        </div>
+        <div id="network-description" style="margin-left: 0px; margin-top: 520px;position: absolute;">
+            <p style="font-size: 20px; color: #333; font-weight: bold;">TOP节点影响力最大化对比</p>
+            <p style="font-size: 14px; color: #555;">为了对比不同方法选择的节点在传播效果上的差异，我们用SIR模型对传播过程进行模拟。选择前K个节点作为初始感染节点，计算达到稳态后网络中的总传播规模，即可表征这一组节点的传播能力。</p>
+        </div>
+            <button class="simu-button" id="start-simulation">Simulate</button>
+            <div id="sir-chart-container" class="chart"></div>
+            <!-- 加入一段空白 -->
+            <div id="space" style="width: 650px;height:80px;"></div>
+        
+        

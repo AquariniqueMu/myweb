@@ -1,0 +1,475 @@
+/* styles/main.css */
+#sidebar {
+    /* margin-top: -200px; */
+    width: 250px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background: #333;
+    color: #fff;
+    display: flex; /* 使用flexbox进行布局 */
+    flex-direction: column; /* 让子元素垂直排列 */
+    justify-content: top; /* 垂直居中 */
+    align-items: center; /* 水平居中 */
+    /* 移除之前的过渡效果 */
+    /* font-size: em; */
+
+    color: #ecf0f1; /* Light text color for contrast */
+    position: fixed;
+    top: 0;
+    left: 0px; /* Start off-screen */
+    width: 250px;
+    height: 100%;
+    overflow-y: auto; /* Enable scroll if content is long */
+    transition: left 0.5s; /* Smooth transition for sidebar */
+    z-index: 1000; /* Ensure sidebar is above other content */
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+}
+
+#sidebar ul {
+    padding-left: 30px; /* 侧边栏的内容贴近左边缘 */
+    list-style-type: none;
+    /* padding: 0; */
+    width: 100%; /* 设置 ul 宽度与侧边栏相同 */
+    /* text-align: center; 文字居中 */
+    /* 调整字体大小 */
+    font-size: 1.1em;
+    font-weight: 200;
+    font-family: Arial, Helvetica, sans-serif;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#sidebar li {
+    padding: 0px 0; /* 增加行距 */
+    line-height: 1; /* 扩大行距 */
+    /* 移除分割线 */
+    border-bottom: 1px solid #34495e; /* Subtle separators for items */
+    
+}
+
+#sidebar li a {
+    text-decoration: none;
+    color: white;
+    display: block;
+    transition: color 0.3s; /* 可以添加过渡效果使颜色变化更平滑 */
+    text-decoration: none;
+    color: #ecf0f1;
+    display: block;
+    padding: 10px 10px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#sidebar li a:hover {
+    color: #aaa; /* 鼠标悬停时的颜色 */
+    background-color: #34495e;
+    color: #f1c40f;
+}
+
+.sidebar ul ul {
+    border-left: 1.5px solid #f1c40f; /* Highlight color */
+    /* 设置长度 */
+    line-height: 0.8;
+}
+
+.sidebar ul ul a {
+    padding-left: 30px; /* Indent sub-items */
+}
+
+#sidebar li ul {
+    display: block; /* 默认不显示二级菜单 */
+    list-style-type: none;
+    padding: 0;
+    padding-left: 40px; /* 为二级标题添加左边距 */
+    
+}
+
+#sidebar li:hover ul {
+    display: block; /* 鼠标悬停时显示二级菜单 */
+}
+
+/* 如果您希望二级菜单也居中，可以添加以下样式 */
+#sidebar li ul {
+    width: 100%; /* 二级菜单宽度 */
+    /* text-align: center; 文字居中 */
+    font-size: 0.8em;
+}
+
+#sidebar li ul li {
+    padding: 10px 0; /* 二级菜单行距 */
+}
+
+#main-content {
+    flex-grow: 1;
+    display: flex;
+    align-items: center; /* 垂直居中 */
+    justify-content: center; /* 水平居中 */
+    flex-direction: column;
+    margin-top: 16vh; 
+    margin-left: -5vh;
+}
+/* 使用微软雅黑 */
+/* 增加行距 */
+#input-content {
+    font-family: "Microsoft YaHei";
+    flex-grow: 1;
+    display: flex;
+    align-items: center; /* 垂直居中 */
+    justify-content: center; /* 水平居中 */
+    flex-direction: column;
+    margin-top: -3vh; 
+    margin-left: 25vh;
+    padding: 20px 0;
+}
+/* 按钮添加阴影 */
+#search-btn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    background: #fff;
+    color: #333;
+    cursor: pointer;
+    transition: background 0.3s;     
+}
+
+#search-input {
+    padding: 10px 9px;
+    
+    border: 1.2px solid #ddd; /* Lighter border for a softer look */
+    border-radius: 10px; /* Larger border-radius for pill-shaped edges */
+    background: #fff;
+    color: #333;
+    cursor: text; /* 'text' cursor on input rather than 'pointer' */
+    transition: border-color 0.3s, box-shadow 0.3s, background-color 0.3s; /* Smooth transitions for interactions */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    outline: none; /* Remove outline to style the focus state manually */
+    font-size: 1em; /* Set default font size */
+    width: 240px; /* Set a default width */
+}
+
+#search-input:focus {
+    border-color: #5dade2; /* Highlight color for focused state */
+    box-shadow: 0 2px 5px rgba(93, 173, 226, 0.5); /* Matching shadow color for focus */
+    background-color: #f8f9f9; /* Slightly different background to indicate focus */
+}
+#result-content {
+    font-family: "Microsoft YaHei";
+    flex-grow: 1;
+    border: 10px solid #aaa;
+    display: flex;
+    align-items: center; /* 垂直居中 */
+    justify-content: center; /* 水平居中 */
+    flex-direction: column;
+    margin-top: 30vh; 
+    margin-left: -40vh;
+    padding: 20px 0;
+}
+.table-responsive {
+    position: relative;
+    /* 添加分割线 */
+    /* border: 20px solid #111111; */
+    margin-top: 10px; /* 或者根据需要调整与导航栏的距离 */
+    font-family: "Microsoft YaHei";
+    font-size: 14px;
+    overflow-y: auto; /* 添加垂直滚动条 */
+    height: 567px; /* 设置容器高度，根据需要调整 */
+    border: 1.5px solid #141414; /* 可选，为容器添加边框 */
+    margin-left: 0px;
+    /* margin-right: 80vh; */
+    /* margin-bottom: 10vh; */
+    margin-top: 1;
+    padding: 20px 0;
+    width: 60vh;
+    align-items: center; /* 垂直居中 */
+    justify-content: center; /* 水平居中 */
+    flex-direction: column;
+    box-shadow:  0 5px 10px rgba(0, 0, 0, 0.5); /* 添加阴影效果 */
+    
+}
+
+
+
+/* 确保这些样式位于你的main.css文件中 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 3px solid #dddddd;
+    /* 居中 */
+    margin: 0 auto;
+    /* table-layout: auto; 添加这一行可以使得列宽根据内容自动调整 */
+    
+}
+
+table caption {
+    font-size: 1.2em;
+    font-family: "Microsoft YaHei";
+    /* font-weight: bold; */
+    margin: 1em 0;
+    margin-top: -5px;
+}
+
+th, td {
+    border: 1px solid #999;
+    text-align: left; /* 或者center，根据你的需要 */
+    font-family: "Microsoft YaHei";
+    font-size: 12px;
+    padding: 8px; /* 调整为需要的大小 */
+    font-weight: normal;
+    color: #0e0d0d;
+}
+
+table thead tr {
+    background-color: rgb(164, 208, 243);
+    /* color: #151515; */
+    font-family: "Microsoft YaHei";
+    font-size: 14px;
+}
+
+table tbody tr:nth-child(odd) {
+    background-color: #eee;
+}
+
+table tbody tr:hover {
+    background-color: #ccc;
+}
+
+table tbody tr td:first-child {
+    color: rgb(13, 13, 13);
+}
+
+table tfoot tr td {
+    text-align: right;
+    padding-right: 20px;
+}
+
+/* 如果表格内容很多，可能需要进行额外的样式调整 */
+td {
+    max-width: 300px; /* 根据需要调整 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* 对于过长的文本内容，使用tooltip进行完整显示 */
+td[title] {
+    cursor: pointer;
+}
+
+td[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    background: #fff;
+    padding: 4px 8px;
+    border: 1px solid #ddd;
+    z-index: 20;
+}
+
+#download-btn {
+    margin-top: 20px;
+    width: 120px;
+    padding: 10px 20px;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    background: #fff;
+    color: #333;
+    cursor: pointer;
+    transition: background 0.3s;     
+}
+
+#build-btn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    background: #fff;
+    color: #333;
+    cursor: pointer;
+    transition: background 0.3s;     
+}
+
+#download-net-btn {
+    margin-top: 20px;
+    width: 120px;
+    padding: 10px 20px;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    background: #fff;
+    color: #333;
+    cursor: pointer;
+    transition: background 0.3s;     
+}
+
+#no-weight-btn {
+    margin-top: 20px;
+    margin-left: 500px;
+    width: 120px;
+    padding: 10px 20px;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    background: #fff;
+    color: #333;
+    cursor: pointer;
+    transition: background 0.3s;     
+}
+
+#with-weight-btn {
+    margin-top: 20px;
+    margin-left: 500px;
+    width: 120px;
+    padding: 10px 20px;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    background: #fff;
+    color: #333;
+    cursor: pointer;
+    transition: background 0.3s;     
+}
+
+
+#centripetal-btn {
+    width: 200px;
+    height: 35px;
+    margin-top: 20px;
+    font-family: Arial, sans-serif;
+    padding: 10px 20px;
+    border: none; /* Remove border for a cleaner look */
+    border-radius: 10px; /* Rounded edges */
+    background: linear-gradient(45deg, #ed786d, #2193b0); /* Gradient background */
+    color: #ffffff; /* White text color for better contrast */
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions for hover effects */
+    /* font-weight: bold; Make the text bold */
+    letter-spacing: 1px; /* Spacing between letters for a sophisticated look */
+    box-shadow:  0 5px 10px rgba(0, 0, 0, 0.5); /* 添加阴影效果 */
+    outline: none; /* Remove the outline to prevent focus highlight */
+}
+
+#centripetal-btn:hover, #centripetal-btn:focus {
+    transform: translateY(-3px); /* Slight move up on hover */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Larger shadow on hover for a "lifting" effect */
+}
+
+#centripetal-btn:active {
+    transform: translateY(-1px); /* Move down slightly on click */
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2); /* Smaller shadow on click */
+}
+
+#centripetal-topo-btn {
+    width: 200px;
+    height: 35px;
+    margin-top: 20px;
+    margin-left: 450px;
+    font-family: Arial, sans-serif;
+    padding: 10px 20px;
+    border: none; /* Remove border for a cleaner look */
+    border-radius: 10px; /* Rounded edges */
+    background: linear-gradient(45deg, #ed786d, #2193b0); /* Gradient background */
+    color: #ffffff; /* White text color for better contrast */
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions for hover effects */
+    /* font-weight: bold; Make the text bold */
+    letter-spacing: 1px; /* Spacing between letters for a sophisticated look */
+    box-shadow:  0 5px 10px rgba(0, 0, 0, 0.5); /* 添加阴影效果 */
+    outline: none; /* Remove the outline to prevent focus highlight */
+}
+
+#centripetal-topo-btn:hover, #centripetal-topo-btn:focus {
+    transform: translateY(-3px); /* Slight move up on hover */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Larger shadow on hover for a "lifting" effect */
+}
+
+#centripetal-topo-btn:active {
+    transform: translateY(-1px); /* Move down slightly on click */
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2); /* Smaller shadow on click */
+}
+
+#simulate-top10-1 {
+    margin-top: 7px;
+    margin-left: 0px;
+    width: 160px;
+    padding: 10px 20px;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    background: #fff;
+    color: #333;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 0.3s;     
+}
+
+
+#select-text {
+    position: absolute;
+    font-family: "Microsoft YaHei";
+    flex-grow: 1;
+    display: flex;
+    align-items: center; /* 垂直居中 */
+    justify-content: center; /* 水平居中 */
+    flex-direction: column;
+    margin-top: 75vh; 
+    margin-left: -12vh;
+    padding: 20px 0;
+}
+
+#top10-select{
+    position: absolute;
+    margin-top: 60px;
+    margin-left: -140px;
+    width: 160px;
+    padding: 10px 20px;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    background: #fff;
+    font-size: 12px;
+    color: #333;
+    cursor: pointer;
+    transition: background 0.3s;    
+    box-shadow:  0 5px 10px rgba(0, 0, 0, 0.5); /* 添加阴影效果 */ 
+}
+#simulate-top10 {
+    width: 200px;
+    height: 35px;
+    margin-top: 10px;
+    margin-left: 300px;
+    font-family: Arial, sans-serif;
+    padding: 10px 20px;
+    border: none; /* Remove border for a cleaner look */
+    border-radius: 10px; /* Rounded edges */
+    background: linear-gradient(45deg, #ed786d, #2193b0); /* Gradient background */
+    color: #ffffff; /* White text color for better contrast */
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions for hover effects */
+    /* font-weight: bold; Make the text bold */
+    letter-spacing: 1px; /* Spacing between letters for a sophisticated look */
+    box-shadow:  0 5px 10px rgba(0, 0, 0, 0.5); /* 添加阴影效果 */
+    outline: none; /* Remove the outline to prevent focus highlight */
+}
+
+#simulate-top10:hover, #simulate-top10:focus {
+    transform: translateY(-3px); /* Slight move up on hover */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Larger shadow on hover for a "lifting" effect */
+}
+
+#simulate-top10:active {
+    transform: translateY(-1px); /* Move down slightly on click */
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2); /* Smaller shadow on click */
+}
+
+#space{
+    position: absolute;
+    margin-top: 1400px;
+    margin-left: 0px;
+    width: 160px;
+    padding: 10px 20px;
+    border: 0px solid #aaa;
+    border-radius: 5px;
+    background: #fff;
+    font-size: 12px;
+    color: #333;
+    cursor: pointer;
+    transition: background 0.3s;     
+}

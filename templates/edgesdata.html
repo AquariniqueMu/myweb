@@ -1,0 +1,126 @@
+<!--
+ * @Description: 
+ * @Author: Junwen Yang
+ * @Date: 2023-11-06 15:58:13
+ * @LastEditTime: 2023-11-07 04:22:58
+ * @LastEditors: Junwen Yang
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+    <script src="/static/scripts/edgesdata.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Node Importance Analysis</title>
+    <link rel="stylesheet" href="../static/styles/main.css">
+    <style>
+        .sidebar {
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: -250px; /* Hide sidebar */
+            height: 100%;
+            background: #333;
+            overflow-x: hidden;
+            transition: 0.5s; /* Smooth transition */
+            padding-top: 60px;
+        }
+        .sidebar:hover {
+            left: 0; /* Show sidebar on hover */
+        }
+        .menu-icon {
+            cursor: pointer;
+            position: absolute;
+            margin-left: 30vh;
+            transition: 0.5s;
+            margin-top: -1vh;
+            top: 20px;
+            left: 10px;
+            width: 40px;
+            height: 40px;
+            /* background: url('path/to/menu-icon.png') no-repeat center center; */
+            /* background-size: cover; */
+        }
+        .menu-icon.open {
+            left: -250px; /* Move to the right by the width of the sidebar */
+        }
+        /* Add padding to the body to make space for the fixed menu icon */
+        body {
+            padding-top: 60px;
+        }
+    </style>
+</head>
+</head>
+<body>
+    <nav id="sidebar", class="sidebar">
+        <ul>
+            <li><a href="/crawl-information">Crawl Information</a>
+                <ul>
+                    <li><a href="/search_weibo">Search Weibo</a></li>
+                    
+                </ul>
+            </li>
+            <li><a href="/dissemination-network">Dissemination Network</a>
+                <ul>
+                    <li><a href="/edgesdata">Edges Data</a></li>
+                    <li><a href="/nettopo">Network Topo</a></li>
+                </ul>
+                
+            </li>
+            <li><a href="/key-spreader-analysis">Key Spreader Analysis</a>
+                <ul>
+                    <li><a href="/degree">Degree</a></li>
+                    <li><a href="/betweenness">Betweenness</a></li>
+                    <li><a href="/closeness">Closeness</a></li>
+                    <li><a href="/centripetal">Centripetal</a></li>
+                    <li><a href="/top10">Top Nodes Simulate</a></li>
+                </ul>
+            </li>
+            <li><a href="/emotionnetwork">Emotion Analysis</a>
+                <ul>
+                    <li><a href="/sentimentanalysis">Emotion Analysis</a></li>
+                    <li><a href="/sentimentspread">Emotion Spread</a></li>
+        </ul>
+    </nav>
+    
+    <div class="menu-icon" onclick="toggleSidebar() ">&#9776;MENU</div>
+    <div id="input-content">
+        <div id="search-container">
+            <h1>Extract Edges Data</h1>
+            <p>这部分页面实现对微博转发网络的转发关系提取</p>
+            <p>Please input the Weibo ID (e.g. 4967376346942041):</p>
+            <input type="text" id="build-input" style="width:240%;">
+            <button id="build-btn">Build Edgelists</button>
+            <button id="download-net-btn">Download</button>
+            
+        </div>
+        
+        <!-- 此部分放在<body>标签内 -->
+        <div id="table-container" class="table-responsive">
+            <table>
+                <!-- <caption>网络连边数据</caption> -->
+                <thead>
+                    <tr>
+   
+                        <th>源节点</th>
+                        <th>目标节点</th>
+                        
+                        
+                        
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- 动态数据行将被JavaScript插入 -->
+                </tbody>
+            </table>
+        </div>
+        
+        
+        
+    </div>
+
+</body>
+</html>
