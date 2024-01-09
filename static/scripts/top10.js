@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: Junwen Yang
  * @Date: 2023-11-14 03:39:45
- * @LastEditTime: 2023-11-14 07:16:57
+ * @LastEditTime: 2023-12-28 12:30:07
  * @LastEditors: Junwen Yang
  */
 
@@ -17,8 +17,40 @@ function toggleSidebar() {
         menuIcon.classList.add('open'); // Move the menu icon back to the left
     }
 }
+function fetchProgress() {
+    fetch('/progress')
+    .then(response => response.json())
+    .then(data => {
+        updateProgressBar(data.progress);
+        if (data.progress < 100) {
+            setTimeout(fetchProgress, 1000); // 每秒查询一次
+        }
+    });
+}
 
+function updateProgressBar(percentage) {
+    var progressBar = document.getElementById('progress-bar');
+    var percentageDisplay = document.getElementById('progress-bar-percentage');
+    progressBar.style.width = percentage + '%';
+    percentageDisplay.textContent = percentage + '%';
 
+}
+function startRandomProgress() {
+    progressInterval = setInterval(() => {
+        let progressBar = document.getElementById('progress-bar');
+        let currentWidth = parseFloat(progressBar.style.width);
+        if (currentWidth < 99) { // 限制随机增长到90%，以避免超过100%
+            // 随机增加1-10%,数字保留整数
+            let randomIncrease = Math.floor(Math.random(1, 10) * 2);
+            
+            updateProgressBar(Math.min(currentWidth + randomIncrease, 99));
+        }
+    }, 1000); // 每1秒随机增加进度
+}
+function stopRandomProgress() {
+    clearInterval(progressInterval);
+}
+var ifsavedlayout = false;
 
 document.addEventListener('DOMContentLoaded', function() {
     // 初始化每个图表
@@ -30,27 +62,63 @@ document.addEventListener('DOMContentLoaded', function() {
     var ccChart = echarts.init(document.getElementById('cc-chart'));
     var cencChart = echarts.init(document.getElementById('cenc-chart'));
     var seedCount = document.getElementById('seed-number').value;
-    var networkName = document.getElementById('network-name').value;
     var infectionRate = document.getElementById('infection-rate').value;
     var recoveryRate = document.getElementById('recovery-rate').value;
+    
 
-    var dc_url = 'get-edgelist-data-dc-top10-2?seedCount=' + seedCount + '&networkName=' + networkName + '&infectionRate=' + infectionRate + '&recoveryRate=' + recoveryRate;
-    var bc_url = 'get-edgelist-data-bc-top10-2?seedCount=' + seedCount + '&networkName=' + networkName + '&infectionRate=' + infectionRate + '&recoveryRate=' + recoveryRate;
-    var cc_url = 'get-edgelist-data-cc-top10-2?seedCount=' + seedCount + '&networkName=' + networkName + '&infectionRate=' + infectionRate + '&recoveryRate=' + recoveryRate;
-    var cenc_url = 'get-edgelist-data-cenc-top10-2?seedCount=' + seedCount + '&networkName=' + networkName + '&infectionRate=' + infectionRate + '&recoveryRate=' + recoveryRate;
+    
+
+    
+    
+    
+    
 
 
     // 设置按钮事件监听器
     document.getElementById('dc-btn').addEventListener('click', function() {
+        var weiboid = document.getElementById('search-input').value;
+    
+        var networkName = document.getElementById('network-name').value;
+        if (networkName == 'weibo') {
+            networkName = 'repo_' + weiboid;
+        }
+        var dc_url = 'get-edgelist-data-dc-top10-2?seedCount=' + seedCount + '&networkName=' + networkName + '&infectionRate=' + infectionRate + '&recoveryRate=' + recoveryRate;
         fetchGraphDataForChart(dcChart, dc_url);
     });
     document.getElementById('bc-btn').addEventListener('click', function() {
+
+        var weiboid = document.getElementById('search-input').value;
+    
+        var networkName = document.getElementById('network-name').value;
+        if (networkName == 'weibo') {
+            networkName = 'repo_' + weiboid;
+        }
+        var bc_url = 'get-edgelist-data-bc-top10-2?seedCount=' + seedCount + '&networkName=' + networkName + '&infectionRate=' + infectionRate + '&recoveryRate=' + recoveryRate;
         fetchGraphDataForChart(bcChart, bc_url);
     });
     document.getElementById('cc-btn').addEventListener('click', function() {
+
+
+
+        var weiboid = document.getElementById('search-input').value;
+    
+        var networkName = document.getElementById('network-name').value;
+        if (networkName == 'weibo') {
+            networkName = 'repo_' + weiboid;
+        }
+        var cc_url = 'get-edgelist-data-cc-top10-2?seedCount=' + seedCount + '&networkName=' + networkName + '&infectionRate=' + infectionRate + '&recoveryRate=' + recoveryRate;
         fetchGraphDataForChart(ccChart, cc_url);
     });
     document.getElementById('cenc-btn').addEventListener('click', function() {
+
+
+        var weiboid = document.getElementById('search-input').value;
+    
+        var networkName = document.getElementById('network-name').value;
+        if (networkName == 'weibo') {
+            networkName = 'repo_' + weiboid;
+        }
+        var cenc_url = 'get-edgelist-data-cenc-top10-2?seedCount=' + seedCount + '&networkName=' + networkName + '&infectionRate=' + infectionRate + '&recoveryRate=' + recoveryRate;
         fetchGraphDataForChart(cencChart, cenc_url);
     });
 
@@ -62,22 +130,42 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log(graph_data);
             // 找出value值为1的节点
             var top_1 = graph_data.nodes.filter(node => node.value == 1);
+            var top10 = graph_data.nodes.sort((a, b) => b.value - a.value).slice(0, 10);
             // 为每个节点设置样式，前十的节点标红，其他节点标蓝
             graph_data.nodes.forEach(node => {
+                var isTop10 = top10.includes(node);
+                var nodeColor = isTop10 ? '#CD5C5C' : '#6495ED'
+
+                node.symbolSize = top10.includes(node) ? 20 : 10;
                 node.label = {
                     normal: {
                         show: top_1.includes(node) ? true : false,
                         // symbolSize: 12,
-                        color: '#000000',
+                        color: 'black',
                         // 字体大小
-                        fontSize: 8,
+                        fontSize: 10,
                         formatter: node.name
                     }
                 };
                 node.itemStyle = {
                     normal: {
-                        color: top_1.includes(node) ? '#FF0000' : '#0000FF',
-                        symbolSize:top_1.includes(node) ? 36 : 12
+                        color: nodeColor,
+                            borderWidth: 0.5,
+                            borderColor: '#FFF',
+                            shadowBlur: 5,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                };
+            });
+
+            // 设置边的属性
+            graph_data.links.forEach(link => {
+                var targetColor = graph_data.nodes.find(node => node.name === link.target).itemStyle.normal.color;
+                link.lineStyle = {
+                    normal: {
+                        width: 0.3,
+                        color: targetColor,
+                        curveness: 0
                     }
                 };
             });
@@ -85,17 +173,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 series: [{
                     type: 'graph',
                     layout: 'force',
+                    
                     data: graph_data.nodes,
                     links: graph_data.links,
                     // symbolSize: top10.includes(node) ? 24 : 12,
                     // 对top10节点设置更大的symbolSize
                     // symbolSize: 12,
                     
-                    draggable: true,
+                    draggable: false,
                     roam: true,
                     
                     force: {
-                        repulsion: 1000
+                        repulsion: 1000,
+                        layoutAnimation: false,
+                        // edgeLength: 800
+                        // gravity: 0.8
                     },
                     label: {
                         normal: {
@@ -108,6 +200,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                     }
                 }]
+                
             };
             
             
@@ -125,12 +218,27 @@ document.addEventListener('DOMContentLoaded', function() {
         var networkName = document.getElementById('network-name').value;
         var infectionRate = document.getElementById('infection-rate').value;
         var recoveryRate = document.getElementById('recovery-rate').value;
+        var weiboid = document.getElementById('search-input').value;
+        var progressBar = document.getElementById('progress-bar');
+        progressBar.style.width = '0%'; // 重置进度条为0
+        updateProgressBar(0); // 初始化进度条为0%
+        startRandomProgress();
+        fetchProgress(); // 启动进度条的更新
+        if (networkName === 'weibo') {
+            networkName = 'repo_' + weiboid;
+        }
+
+        
 
         var url = `/start-simulation?seed-number=${seedCount}&network-name=${networkName}&infection-rate=${infectionRate}&recovery-rate=${recoveryRate}`;
+
+        
+
 
         fetch(url)
         .then(response => response.json())
         .then(data => {
+            
             var option = {
                 backgroundColor: '#f4f4f4', // 背景颜色
                 tooltip: {
@@ -181,11 +289,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
             };
             sirChart.setOption(option);
+            updateProgressBar(100);
         })
         .catch(error => console.error('Error:', error));
 });
 
-
+document.getElementById('network-name').addEventListener('change', function() {
+    var selectedNetwork = this.value;
+    var weiboInputContainer = document.getElementById('weibo-input-container');
+    if (selectedNetwork === 'weibo') {
+        weiboInputContainer.style.display = 'block';
+    } else {
+        weiboInputContainer.style.display = 'none';
+    }
+});
 
 
 });

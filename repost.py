@@ -2,7 +2,7 @@
 Description: 获取特定微博的转发信息
 Author: Junwen Yang
 Date: 2023-04-19 02:44:59
-LastEditTime: 2023-11-13 23:48:18
+LastEditTime: 2023-12-20 17:57:45
 LastEditors: Junwen Yang
 '''
 import json
@@ -83,7 +83,7 @@ def append_dict_to_dataframe(info_dict:dict, repo_col:list) -> pd.DataFrame:
     info_dict_sorted = {col: info_dict[col] for col in df_info.columns}
     
     # 将d_sorted的值添加到DataFrame中
-    df_info = df_info.append(info_dict_sorted, ignore_index=True)
+    df_info = df_info._append(info_dict_sorted, ignore_index=True)
     
     return df_info
 
@@ -194,11 +194,13 @@ def Get_Reposts(weibo_id: str, page:int, Cookie:str) -> dict:
     # 在每次请求时都重新生成一个session, 应对反爬虫
     session = requests.Session()
     session.keep_alive = False
+    ua = fake_useragent.UserAgent()    
     
     # 设置请求头, 伪装成浏览器
+    ua = fake_useragent.UserAgent()
     headers = {
     # 随机生成的User-Agent，确保每次爬取的都是不同的User-Agent
-    'User-Agent': random.choice(fake_useragent.UserAgent().data_browsers['chrome']),
+    'User-Agent':ua.random,
     # 关闭长连接
     'Connection': 'close',
     
@@ -364,7 +366,7 @@ def start_crawl(uid:int, Cookie:str, path:str):
                 df_repo_all_info = append_dict_to_dataframe(combined_dict, repo_columns)
                 
                 # 追加到总dataframe中
-                # df = df.append(df_repo_all_info, ignore_index=True)
+                # df = df._append(df_repo_all_info, ignore_index=True)
                 df = merge_dataframes_remove_duplicate_rows(df, df_repo_all_info)
                 
                 repost_count += 1
@@ -392,7 +394,7 @@ def start_crawl(uid:int, Cookie:str, path:str):
     # with pd.ExcelWriter(path+filename_df,mode='a',engine='openpyxl') as writer:
     #     df.to_excel(writer, sheet_name=sheet_name, index=False)
     df.to_excel(writer, sheet_name=sheet_name, index=False)
-    writer.save()
+    writer._save()
     writer.close()
     return df
 

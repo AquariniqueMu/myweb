@@ -2,7 +2,7 @@
 Description: SIR模型代码
 Author: Junwen Yang
 Date: 2023-06-30 12:12:58
-LastEditTime: 2023-11-14 04:16:22
+LastEditTime: 2023-12-20 18:00:04
 LastEditors: Junwen Yang
 '''
 import networkx as nx
@@ -41,7 +41,7 @@ def SIR_simulation(G, initial_infected=[0], infection_rate=0.1, recovery_rate=0.
             scales.append(len(I) + len(R)) # 记录每个时间步的感染规模
             
         final_scales.append(len(I) + len(R)) # 记录最终的传播规模
-        avg_scales_df = avg_scales_df.append(pd.DataFrame(scales, columns=['Scale']), ignore_index=True)
+        avg_scales_df = avg_scales_df._append(pd.DataFrame(scales, columns=['Scale']), ignore_index=True)
 
     
     

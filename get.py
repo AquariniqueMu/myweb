@@ -2,7 +2,7 @@
 Description: 
 Author: Junwen Yang
 Date: 2023-11-06 19:55:37
-LastEditTime: 2023-11-14 07:01:18
+LastEditTime: 2023-12-28 16:54:21
 LastEditors: Junwen Yang
 '''
 '''
@@ -18,6 +18,7 @@ from repost import repo_main  # 确保这个模块可用
 import pandas as pd
 import argparse
 import networkx as nx
+import math
 from construct_net import construct_net_main
 from DC import degree_centrality
 from BC import betweenness_centrality
@@ -88,6 +89,11 @@ def closeness():
 def top10():
     return render_template('top10.html')
 
+@app.route('/centripetal-title')
+def centripetaltitle():
+    return render_template('cenc_intro.html')
+
+
 @app.route('/centripetal')
 def centripetal():
     return render_template('centripetal.html')
@@ -138,8 +144,8 @@ def calculate_emotion(uid):
     df = df[['发布时间','微博编号','文本内容','转发数','评论数','点赞数','昵称','情绪分值']]
     
     
-    df.to_excel('repo_'+str(uid)+'_emo.xlsx', index=False, encoding='utf-8')
-    df.to_excel('result_emo.xlsx', index=False, encoding='utf-8')
+    df.to_excel('repo_'+str(uid)+'_emo.xlsx')
+    df.to_excel('result_emo.xlsx')
     return df
 
 
@@ -197,6 +203,25 @@ def get_edgelist_data():
         node_set.add(edge['target'])
     nodes = [{'name': node} for node in node_set]
 
+
+
+    G = nx.read_weighted_edgelist('result.edgelist', create_using=nx.Graph())
+    degrees = dict(G.degree())
+    log_degrees = {node: math.log(degree + 2) for node, degree in degrees.items()}  # 加1是为了避免对0取对数
+    degrees = log_degrees
+    # 最大值改为第二大值+5
+    max_degree = sorted(degrees.values(), reverse=True)[1] + 1
+    min_degree = min(degrees.values())
+    
+    for node in nodes:
+        node_name = node['name']
+        node_degree = degrees[node_name]
+        # 归一化节点度
+        node['degree'] = (node_degree - min_degree) / (max_degree - min_degree) if node_degree !=  sorted(degrees.values(), reverse=True)[0] else (max_degree - min_degree) / (max_degree - min_degree) 
+        node['max_degree'] = (max_degree - min_degree) / (max_degree - min_degree) 
+        # 用对数减少大度值的影响
+        print(node['degree'])
+
     # 创建JSON对象
     graph_data = {
         'nodes': nodes,
@@ -217,7 +242,13 @@ def get_edgelist_data_dc():
         dict_degree[k] = (v - min(dict_degree.values())) / (max(dict_degree.values()) - min(dict_degree.values()))
     edges = [{'source': edge[0], 'target': edge[1]} for edge in G.edges()]
     # 生成节点数据，设置 symbolSize 为权重的20倍
-    node_list = [{'name': node, 'value': dict_degree[node] * 40} for node in G.nodes()]
+    maxdegree = sorted(dict_degree.values(), reverse=True)[1]
+    node_list = [{'name': node, 'value': dict_degree[node] * 40} if dict_degree[node] !=  sorted(dict_degree.values(), reverse=True)[0] else {'name': node, 'value': maxdegree * 40 + 10}  for node in G.nodes()]
+    
+    
+    for node in node_list:
+        node['max_degree'] = maxdegree * 40
+    
     print(node_list)
     # 创建JSON对象
     graph_data = {
@@ -240,7 +271,20 @@ def get_edgelist_data_bc():
     edges = [{'source': edge[0], 'target': edge[1]} for edge in G.edges()]
     # 生成节点数据，设置 symbolSize 为权重的20倍
     node_list = [{'name': node, 'value': dict_bc[node] * 40} for node in G.nodes()]
-    print(node_list)
+    # print(node_list)
+    
+    max_bc = sorted(dict_bc.values(), reverse=True)[0]
+    min_bc = min(dict_bc.values())
+    
+    
+    # 归一化
+    for node in node_list:
+        node['value'] = math.log((node['value'] - min_bc) / (max_bc - min_bc) * 9 + 1) + 1
+    
+    for node in node_list:
+        node['max_bc'] = max_bc
+    
+    
     # 创建JSON对象
     graph_data = {
         'nodes': node_list,
@@ -262,7 +306,16 @@ def get_edgelist_data_cc():
     edges = [{'source': edge[0], 'target': edge[1]} for edge in G.edges()]
     # 生成节点数据，设置 symbolSize 为权重的20倍
     node_list = [{'name': node, 'value': dict_cc[node]} for node in G.nodes()]
-    print(node_list)
+    # print(node_list)
+    
+    max_cc = sorted(dict_cc.values(), reverse=True)[0]
+    
+    for node in node_list: 
+        node['max_cc'] = max_cc
+    
+    
+    
+    
     # 创建JSON对象
     graph_data = {
         'nodes': node_list,
@@ -333,7 +386,7 @@ def get_edgelist_data_dc_top10():
         'links': edges
     }
     return jsonify(graph_data)
-
+import numpy as np
 @app.route('/get-edgelist-data-emo', methods=['GET'])
 def get_edgelist_data_emo():
     # 获取第N高度值的节点位次
@@ -353,11 +406,15 @@ def get_edgelist_data_emo():
     # 边的权重为两个节点的情绪分值的差值，目标节点减去源节点
     for edge in G.edges():
         emo_of_edges[edge] = emo_of_nodes[edge[1]] - emo_of_nodes[edge[0]]
+        if emo_of_edges[edge] == np.inf:
+            emo_of_edges[edge] = 1
 
+    
+    
     
     edges = [{'source': str(edge[0]), 'target': str(edge[1])} for edge in G.edges()]
     # 生成节点数据，设置 symbolSize 为权重的20倍
-    node_list = [{'name': str(node), 'value': float(emo_of_nodes[node]), 'Size': float(node_size[node])} for node in G.nodes()]
+    node_list = [{'name': str(node), 'value': emo_of_nodes[node], 'Size':node_size[node]} for node in G.nodes()]
     
     
     
@@ -382,7 +439,7 @@ def get_edgelist_data_bc_top10():
     edges = []
     nodes = {}
     G = nx.read_weighted_edgelist('result_dc.edgelist',  create_using=nx.DiGraph())
-    dc_dict = nx.degree_centrality(G)
+    dc_dict = nx.betweenness_centrality(G)
     sorted_dc_dict = sorted(dc_dict.items(), key=lambda kv: (kv[1], kv[0]), reverse=True)
     # 获取第N高度值的节点的名称
     print(selected_node_index)
@@ -473,10 +530,24 @@ def get_edgelist_data_cenc():
         print(node, dict_cenc[node])
     # max-min归一化
     for k, v in dict_cenc.items():
-        dict_cenc[k] = (v - min(dict_cenc.values())) / (max(dict_cenc.values()) - min(dict_cenc.values()))
+        dict_cenc[k] = (v - min(dict_cenc.values())) / (max(dict_cenc.values()) - min(dict_cenc.values())) if (max(dict_cenc.values()) - min(dict_cenc.values())) != 0 else 0
     edges = [{'source': edge[0], 'target': edge[1]} for edge in G.edges()]
+    
+    
+    # 最大值改为第二大值+5
+    max_cenc = sorted(dict_cenc.values(), reverse=True)[0]
+    # 替换最大值
+    for node in dict_cenc:
+        if dict_cenc[node] == sorted(dict_cenc.values(), reverse=True)[0]:
+            dict_cenc[node] = max_cenc
+    
+    # log_cenc = {node: math.log(cenc + 1) for node, cenc in dict_cenc.items()}  # 加1是为了避免对0取对数
+    # dict_cenc = log_cenc
+    
+    
     # 生成节点数据，设置 symbolSize 为权重的20倍
-    node_list = [{'name': node, 'value': dict_cenc[node] * 40} for node in G.nodes()]
+    node_list = [{'name': node, 'value': dict_cenc[node], 'max_cenc': max_cenc} for node in G.nodes()]
+    
     print(node_list)
     # 创建JSON对象
     graph_data = {
@@ -783,7 +854,7 @@ def SIR_compare():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0',debug=True)
 
 
 

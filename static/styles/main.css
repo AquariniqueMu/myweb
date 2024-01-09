@@ -1,7 +1,7 @@
 /* styles/main.css */
 #sidebar {
     /* margin-top: -200px; */
-    width: 250px;
+
     position: fixed;
     left: 0;
     top: 0;
@@ -19,13 +19,14 @@
     position: fixed;
     top: 0;
     left: 0px; /* Start off-screen */
-    width: 250px;
+    width: 12%;
     height: 100%;
     overflow-y: auto; /* Enable scroll if content is long */
-    transition: left 0.5s; /* Smooth transition for sidebar */
+    transition: left 0.3s ease-in-out; /* 保持平滑过渡 */
     z-index: 1000; /* Ensure sidebar is above other content */
     display: flex;
     flex-direction: column; /* Stack items vertically */
+    box-shadow: 5px 0 30px rgba(14, 13, 13, 0.5); /* 添加阴影效果 */
 }
 
 #sidebar ul {
@@ -114,6 +115,7 @@
 /* 使用微软雅黑 */
 /* 增加行距 */
 #input-content {
+    position: absolute;
     font-family: "Microsoft YaHei";
     flex-grow: 1;
     display: flex;
@@ -121,7 +123,7 @@
     justify-content: center; /* 水平居中 */
     flex-direction: column;
     margin-top: -4vh; 
-    margin-left: -70vh;
+    margin-left: 250px;
     padding: 20px 0;
 }
 /* 按钮添加阴影 */
@@ -216,7 +218,7 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
     outline: none; /* Remove outline to style the focus state manually */
     font-size: 1em; /* Set default font size */
-    width: 240px; /* Set a default width */
+    
 }
 
 #search-input:focus {
@@ -238,21 +240,21 @@
     padding: 20px 0;
 }
 .table-responsive {
-    position: relative;
+    position: absolute;
     /* 添加分割线 */
     border: 5px solid #dddddd;
-    margin-top: 10px; /* 或者根据需要调整与导航栏的距离 */
+    margin-top: 1300px; /* 或者根据需要调整与导航栏的距离 */
     font-family: "Microsoft YaHei";
     font-size: 12px;
     overflow-y: auto; /* 添加垂直滚动条 */
     height: 800px; /* 设置容器高度，根据需要调整 */
     border: 1px solid #ddd; /* 可选，为容器添加边框 */
-    margin-left: 93vh;
+    margin-left: 760px;
     /* margin-right: 80vh; */
     /* margin-bottom: 10vh; */
-    margin-top: 5vh;
+    margin-top: 1150px;
     padding: 20px 0;
-    width: 156vh;
+    width: 230%;
     align-items: center; /* 垂直居中 */
     justify-content: center; /* 水平居中 */
     flex-direction: column;
@@ -427,6 +429,7 @@ td[title]:hover::after {
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* 添加阴影效果 */
     margin-top: 20px;
+    /* margin-left: ; */
 }
 
 #progress-bar {
@@ -497,10 +500,10 @@ td[title]:hover::after {
 
 #no-weight-btn {
     position: absolute;
-    width: 160px;
+    width: 320px;
     height: 35px;
-    margin-left: 400px;
-    margin-top: 90px;
+    margin-left: 350px;
+    margin-top: 75px;
     font-family: Arial, sans-serif;
     padding: 10px 20px;
     border: none; /* Remove border for a cleaner look */
@@ -513,6 +516,35 @@ td[title]:hover::after {
     letter-spacing: 1px; /* Spacing between letters for a sophisticated look */
     box-shadow:  0 5px 10px rgba(0, 0, 0, 0.5); /* 添加阴影效果 */
     outline: none; /* Remove the outline to prevent focus highlight */
+}
+#progress-bar-container {
+    margin-left: 920px;
+    margin-top: 190px;
+    height: 30px;
+    width: 50%;
+    background-color: rgb(237, 234, 234);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* 添加阴影效果 */
+}
+#progress-bar-percentage {
+    color: white;
+    position: absolute;
+    margin-top: 0px;
+    width: 100%;
+    text-align: center;
+    line-height: 30px; /* 使文字垂直居中 */
+    text-shadow: #cfcbcb 0 0.2px 0; /* 添加文字阴影 */
+    font-family: Microsoft YaHei;
+    
+}
+
+
+#progress-bar {
+    /* margin-left: -200px; */
+    height: 30px;
+    width: 0;
+    background-color: rgb(134, 213, 245);
+    transition: width 1s;
 }
 
 #no-weight-btn:hover, #no-weight-btn:focus {

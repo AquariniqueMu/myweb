@@ -2,7 +2,7 @@
 Description: 
 Author: Junwen Yang
 Date: 2023-04-22 00:09:29
-LastEditTime: 2023-11-07 04:20:11
+LastEditTime: 2023-12-20 17:59:17
 LastEditors: Junwen Yang
 '''
 import networkx as nx
@@ -132,7 +132,7 @@ def construct_net_main(id,read_path: str = '', save_path: str = '',source_node_d
     # 将G的连边保存到dataframe中，第一列为源节点，第二列为目标节点
     df = pd.DataFrame(columns=['源节点', '目标节点'])
     for edge in G.edges:
-        df = df.append({'源节点': edge[0], '目标节点': edge[1]}, ignore_index=True)
+        df = df._append({'源节点': edge[0], '目标节点': edge[1]}, ignore_index=True)
     
     print(df)
     

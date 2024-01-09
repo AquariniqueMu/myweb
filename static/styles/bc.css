@@ -19,13 +19,15 @@
     position: fixed;
     top: 0;
     left: 0px; /* Start off-screen */
-    width: 250px;
+    width: 12%;
     height: 100%;
     overflow-y: auto; /* Enable scroll if content is long */
     transition: left 0.5s; /* Smooth transition for sidebar */
     z-index: 1000; /* Ensure sidebar is above other content */
     display: flex;
     flex-direction: column; /* Stack items vertically */
+    
+    box-shadow: 5px 0 30px rgba(14, 13, 13, 0.5); /* 添加阴影效果 */
 }
 
 #sidebar ul {
@@ -50,7 +52,6 @@
     border-bottom: 1px solid #34495e; /* Subtle separators for items */
     
 }
-
 #sidebar li a {
     text-decoration: none;
     color: white;
@@ -114,6 +115,7 @@
 /* 使用微软雅黑 */
 /* 增加行距 */
 #input-content {
+    position: absolute;
     font-family: "Microsoft YaHei";
     flex-grow: 1;
     display: flex;
@@ -121,7 +123,7 @@
     justify-content: center; /* 水平居中 */
     flex-direction: column;
     margin-top: -3vh; 
-    margin-left: 25vh;
+    margin-left: 250px;
     padding: 20px 0;
 }
 /* 按钮添加阴影 */
@@ -133,8 +135,8 @@
     background: #fff;
     color: #333;
     cursor: pointer;
-    transition: background 0.3s;     
-    box-shadow:  0 5px 10px rgba(0, 0, 0, 0.5); /* 添加阴影效果 */
+    transition: background 0.3s;   
+    box-shadow:  0 5px 10px rgba(0, 0, 0, 0.5); /* 添加阴影效果 */  
 }
 
 #search-input {
@@ -184,13 +186,14 @@
     /* margin-bottom: 10vh; */
     margin-top: 1;
     padding: 20px 0;
-    width: 60vh;
+    width: 80%;
     align-items: center; /* 垂直居中 */
     justify-content: center; /* 水平居中 */
     flex-direction: column;
     box-shadow:  0 5px 10px rgba(0, 0, 0, 0.5); /* 添加阴影效果 */
     
 }
+
 
 
 
@@ -304,33 +307,9 @@ td[title]:hover::after {
     color: #333;
     cursor: pointer;
     transition: background 0.3s;     
+    box-shadow:  0 5px 10px rgba(0, 0, 0, 0.5); /* 添加阴影效果 */
 }
 
-#no-weight-btn {
-    margin-top: 20px;
-    margin-left: 500px;
-    width: 120px;
-    padding: 10px 20px;
-    border: 1px solid #aaa;
-    border-radius: 5px;
-    background: #fff;
-    color: #333;
-    cursor: pointer;
-    transition: background 0.3s;     
-}
-
-#with-weight-btn {
-    margin-top: 20px;
-    margin-left: 500px;
-    width: 120px;
-    padding: 10px 20px;
-    border: 1px solid #aaa;
-    border-radius: 5px;
-    background: #fff;
-    color: #333;
-    cursor: pointer;
-    transition: background 0.3s;     
-}
 
 
 #betweenness-btn {
@@ -362,10 +341,11 @@ td[title]:hover::after {
 }
 
 #betweenness-topo-btn {
+    position: absolute;
     width: 240px;
     height: 35px;
     margin-top: 20px;
-    margin-left: 450px;
+    margin-left: 430px;
     font-family: Arial, sans-serif;
     padding: 10px 20px;
     border: none; /* Remove border for a cleaner look */

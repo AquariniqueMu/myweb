@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: Junwen Yang
  * @Date: 2023-11-07 04:27:04
- * @LastEditTime: 2023-11-13 16:55:59
+ * @LastEditTime: 2023-11-14 10:00:16
  * @LastEditors: Junwen Yang
  */
 function toggleSidebar() {
@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
         fetch('get-edgelist-data-emo')
             .then(response => response.json())
             .then(graph_data => {
+                console.log(graph_data);
                 // 打印一句话
                 // 找出最大权重
                 var maxWeight = Math.max(...graph_data.nodes.map(node => node.value));
@@ -54,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     };
                     node.itemStyle = {
                         normal: {
-                            symbolSize: 48,
+                            symbolSize: 16,
                             // 按照权重大小从绿色到红色渐变,最大权重为绿色，最小权重为红色，如果权重为0，则为灰色
                             color: node.value === 0 ? '#cccccc' : `rgb(${255 - Math.round(node.value / maxWeight * 255)}, 150, 220)`
                         }
@@ -70,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         data: graph_data.nodes,
                         links: graph_data.links,
                         layout: 'force',
-                        focusNodeAdjacency: true,
+                        // focusNodeAdjacency: true,
                         symbolSize: 18,
                         draggable: true,
                         
@@ -82,7 +83,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         // ...其他选项
                     }]
                 };
+                console.log(option);
                 chart.setOption(option);
+                console.log(chart);
             })
             .catch(error => console.error('Error:', error));
     });

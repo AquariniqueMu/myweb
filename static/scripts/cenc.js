@@ -11,7 +11,38 @@ function toggleSidebar() {
         menuIcon.classList.add('open'); // Move the menu icon back to the left
     }
 }
+function fetchProgress() {
+    fetch('/progress')
+    .then(response => response.json())
+    .then(data => {
+        updateProgressBar(data.progress);
+        if (data.progress < 100) {
+            setTimeout(fetchProgress, 1000); // 每秒查询一次
+        }
+    });
+}
+function updateProgressBar(percentage) {
+    var progressBar = document.getElementById('progress-bar');
+    var percentageDisplay = document.getElementById('progress-bar-percentage');
+    progressBar.style.width = percentage + '%';
+    percentageDisplay.textContent = percentage + '%';
 
+}
+function startRandomProgress() {
+    progressInterval = setInterval(() => {
+        let progressBar = document.getElementById('progress-bar');
+        let currentWidth = parseFloat(progressBar.style.width);
+        if (currentWidth < 90) { // 限制随机增长到90%，以避免超过100%
+            // 随机增加1-10%,数字保留整数
+            let randomIncrease = Math.floor(Math.random(1, 10) * 5);
+            
+            updateProgressBar(Math.min(currentWidth + randomIncrease, 99));
+        }
+    }, 1000); // 每1秒随机增加进度
+}
+function stopRandomProgress() {
+    clearInterval(progressInterval);
+}
 document.addEventListener('DOMContentLoaded', function() {
     var mainContainer = document.getElementById('main');
     var mainContainer2 = document.getElementById('main2');
@@ -78,29 +109,42 @@ document.addEventListener('DOMContentLoaded', function() {
         fetch('get-edgelist-data-cenc')
             .then(response => response.json())
             .then(graph_data => {
-                
-                var maxWeight = 0;
-                if (withWeight) {
-                    maxWeight = Math.max(...graph_data.nodes.map(node => node.value));
-                }
+               
                 // 找出value值前十的节点
                 var top10 = graph_data.nodes.sort((a, b) => b.value - a.value).slice(0, 10);
                 // 为每个节点设置样式，前十的节点标红，其他节点标蓝
                 graph_data.nodes.forEach(node => {
+                    var isTop10 = top10.includes(node);
+                    var nodeColor = isTop10 ? '#CD5C5C' : '#6495ED'
+                    node.symbolSize = 10 + 30 * (node.value ); // 根据度值调整大小
                     node.label = {
                         normal: {
                             show: top10.includes(node) ? true : false,
                             // symbolSize: 12,
                             color: '#000000',
                             // 字体大小
-                            fontSize: 8,
+                            fontSize: 16,
                             formatter: node.name
                         }
                     };
                     node.itemStyle = {
                         normal: {
-                            color: top10.includes(node) ? '#FF0000' : '#0000FF',
-                            symbolSize:top10.includes(node) ? 100 : 12
+                            color: nodeColor,
+                            borderWidth: 0.5,
+                            borderColor: '#FFF',
+                            shadowBlur: 5,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    };
+                });
+                // 设置边的属性
+                graph_data.links.forEach(link => {
+                    var targetColor = graph_data.nodes.find(node => node.name === link.target).itemStyle.normal.color;
+                    link.lineStyle = {
+                        normal: {
+                            width: 0.3,
+                            color: targetColor,
+                            curveness: 0.3
                         }
                     };
                 });
@@ -110,23 +154,20 @@ document.addEventListener('DOMContentLoaded', function() {
                         layout: 'force',
                         data: graph_data.nodes,
                         links: graph_data.links,
-                        // symbolSize: top10.includes(node) ? 24 : 12,
-                        // 对top10节点设置更大的symbolSize
-                        // symbolSize: 12,
-                        
-                        draggable: true,
+                        focusNodeAdjacency: true,
+                        draggable: false,
                         roam: true,
-                        
                         force: {
-                            repulsion: 1000
+                            repulsion: 500,
+                            edgeLength: 500,
+                            gravity: 0.1,
+                            layoutAnimation: false
                         },
                         label: {
                             normal: {
                                 show: true,
-                                
                                 textStyle: {
                                     color: '#333'
-                                    
                                 }
                             }
                         }
@@ -151,6 +192,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // 事件监听器
     document.getElementById('centripetal-btn').addEventListener('click', function() {
         var uid = document.getElementById('search-input').value;
+        var progressBar = document.getElementById('progress-bar');
+        progressBar.style.width = '0%'; // 重置进度条为0
+        updateProgressBar(0); // 初始化进度条为0%
+        startRandomProgress();
+        fetchProgress(); // 启动进度条的更新
         fetch('get-cenc-data', {
             method: 'POST',
             body: new URLSearchParams({ 'uid': uid }),
@@ -161,6 +207,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             createTable(data);
+            updateProgressBar(100); 
         })
         .catch(error => console.error('Error:', error));
     });
@@ -178,9 +225,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(graph_data => {
                 initChart2()
                 var maxWeight = 0;
-                if (withWeight) {
-                    maxWeight = Math.max(...graph_data.nodes.map(node => node.value));
-                }
+
                 // 找出value值不为0的节点
                 var not_zero = graph_data.nodes.filter(node => node.value != 0);
                 // 找出value值=graph_data长度的节点
@@ -188,6 +233,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // 为每个节点设置样式，前十的节点标红，其他节点标蓝
                 graph_data.nodes.forEach(node => {
+                    node.symbolSize = top1.includes(node) ? 100 : 20;
                     node.label = {
                         normal: {
                             show: top1.includes(node) ? true : false,
@@ -200,8 +246,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     };
                     node.itemStyle = {
                         normal: {
-                            color: not_zero.includes(node) ? '#FF0000' : '#0000FF',
-                            symbolSize:top1.includes(node) ? 36 : 12
+                            color: not_zero.includes(node) ? '#CD5C5C' : '#6495ED',
+                            borderWidth: 0.5,
+                            borderColor: '#FFF',
+                            shadowBlur: 5,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
                         }
                     };
                 });
@@ -213,13 +262,14 @@ document.addEventListener('DOMContentLoaded', function() {
                         links: graph_data.links,
                         // symbolSize: top10.includes(node) ? 24 : 12,
                         // 对top10节点设置更大的symbolSize
-                        symbolSize: 20,
-                        
-                        draggable: true,
+                        focusNodeAdjacency: false,
+                        draggable: false,
                         roam: true,
-                        focusNodeAdjacency: true,
                         force: {
-                            repulsion: 1000
+                            repulsion: 500,
+                            edgeLength: 500,
+                            gravity: 0.1,
+                            layoutAnimation: false
                         },
                         label: {
                             normal: {
@@ -244,21 +294,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
    
     // 事件监听器
-    document.getElementById('centripetal-btn').addEventListener('click', function() {
-        var uid = document.getElementById('search-input').value;
-        fetch('get-cenc-data', {
-            method: 'POST',
-            body: new URLSearchParams({ 'uid': uid }),
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-        })
-        .then(response => response.json())
-        .then(data => {
-            createTable(data);
-        })
-        .catch(error => console.error('Error:', error));
-    });
+    // document.getElementById('centripetal-btn').addEventListener('click', function() {
+    //     var uid = document.getElementById('search-input').value;
+    //     fetch('get-cenc-data', {
+    //         method: 'POST',
+    //         body: new URLSearchParams({ 'uid': uid }),
+    //         headers: {
+    //             'Content-Type': 'application/x-www-form-urlencoded',
+    //         },
+    //     })
+    //     .then(response => response.json())
+    //     .then(data => {
+    //         createTable(data);
+    //     })
+    //     .catch(error => console.error('Error:', error));
+    // });
 
 
 

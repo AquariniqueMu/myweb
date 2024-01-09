@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: Junwen Yang
  * @Date: 2023-11-06 10:43:19
- * @LastEditTime: 2023-11-13 23:48:42
+ * @LastEditTime: 2023-12-25 15:03:59
  * @LastEditors: Junwen Yang
  */
 // scripts/main.js
@@ -30,13 +30,35 @@ function fetchProgress() {
 
 function updateProgressBar(percentage) {
     var progressBar = document.getElementById('progress-bar');
+    var percentageDisplay = document.getElementById('progress-bar-percentage');
     progressBar.style.width = percentage + '%';
-}
+    percentageDisplay.textContent = percentage + '%';
 
+}
+function startRandomProgress() {
+    progressInterval = setInterval(() => {
+        let progressBar = document.getElementById('progress-bar');
+        let currentWidth = parseFloat(progressBar.style.width);
+        if (currentWidth < 90) { // 限制随机增长到90%，以避免超过100%
+            // 随机增加1-10%,数字保留整数
+            let randomIncrease = Math.floor(Math.random(1, 10) * 10);
+            
+            updateProgressBar(Math.min(currentWidth + randomIncrease, 90));
+        }
+    }, 1000); // 每1秒随机增加进度
+}
+function stopRandomProgress() {
+    clearInterval(progressInterval);
+}
 document.addEventListener('DOMContentLoaded', function() {
-    
+  
   document.getElementById('search-btn').addEventListener('click', function() {
-      
+      var progressBar = document.getElementById('progress-bar');
+      progressBar.style.width = '0%'; // 重置进度条为0
+      updateProgressBar(0); // 初始化进度条为0%
+      startRandomProgress();
+      fetchProgress(); // 启动进度条的更新
+
       var uid = document.getElementById('search-input').value; // 获取输入的uid
       fetch('/crawl', {
           method: 'POST',
@@ -48,8 +70,12 @@ document.addEventListener('DOMContentLoaded', function() {
       .then(response => response.json())
       .then(data => {
           createTable(data);
+          updateProgressBar(100); // 数据加载完成，进度条填满
       })
-      .catch(error => console.error('Error:', error));
+      .catch(error => {
+          console.error('Error:', error);
+          updateProgressBar(100); // 出错时也将进度条填满
+      });
   });
   
   document.getElementById('download-btn').addEventListener('click', function() {

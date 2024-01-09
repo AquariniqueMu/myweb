@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: Junwen Yang
  * @Date: 2023-11-06 10:33:16
- * @LastEditTime: 2023-11-14 02:42:41
+ * @LastEditTime: 2023-12-26 14:42:08
  * @LastEditors: Junwen Yang
 -->
 <!--
@@ -30,11 +30,23 @@
     <title>Node Importance Analysis</title>
     <link rel="stylesheet" href="../static/styles/main.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_HTML"></script>
-
+    
+    
     <style>
+        .container a,
+        .container a:visited, /* 添加访问后的样式 */
+        .container a:hover,
+        .container a:active { /* 添加激活时的样式 */
+            color: black; /* 设置文本颜色为黑色 */
+            text-decoration: none; /* 移除下划线 */
+        }
 
+        .container a:hover {
+            text-decoration: none; /* 可选：鼠标悬停时显示下划线 */
+        }
+
+        
         .sidebar {
-            width: 250px;
             position:absolute;
             top: 0;
             left: -250px; /* Hide sidebar */
@@ -75,7 +87,7 @@
         .menu-icon {
             cursor: pointer;
             position: absolute;
-            margin-left: 30vh;
+            margin-left: 12%;
             transition: 0.5s;
             margin-top: -1vh;
             top: 20px;
@@ -84,9 +96,11 @@
             height: 40px;
             /* background: url('path/to/menu-icon.png') no-repeat center center; */
             /* background-size: cover; */
+            font-size: 20px;
         }
         .menu-icon.open {
-            left: -250px; /* Move to the right by the width of the sidebar */
+            left: -210px; /* Move to the right by the width of the sidebar */
+            
         }
         /* Add padding to the body to make space for the fixed menu icon */
         body {
@@ -250,10 +264,10 @@
         </div>
     </div>
         <div class="container">
-        <div class="bg content-section">
+        <div class="bg content-section"><a href="/centripetal-title">
             <h2>Centripetal Centrality</h2>
             <p>向心力中心性(centripetal centrality)结合了有关节点的全局、局部以及半局部拓扑信息，包括节点的K shell指数、约束系数、度中心性分数等，从而得出更全面的评估结果。</p>
-        </div>
+        </a></div> 
 
         <div class="bg content-section">
             <h2>多因素信息矩阵中心性</h2>
@@ -269,38 +283,6 @@
         <!-- Additional sections can be added here -->
     </main>
     
-    <script src="scripts/main.js"></script>
-
-
-    <!-- LaTeX 公式和中文内容的部分 -->
-    <div class="latex-chinese-content">
-        <h2>向心力中心性</h2>
-        <p style="text-align: center;">Chaos, Solitons & Fractals</p>
-        <p style="text-align: center;">Yan Wanga, Haozhan Li, Ling Zhanga, Linlin Zhaoa, Wanlan Li</p>
-        <p style="text-align: left;">节点的影响力是指节点传播信息的能力，由于信息传播取决于特定网络的特征，因此网络结构必然会对信息传播过程产生影响，而信息传播过程又会影响节点的重要性。鉴于节点的影响力可以从多个网络拓扑维度来描述，因此对于提高系统的准确性非常重要，我们提出了一种整合全局、局部和半局部指标的方法--向心度（CC）。在我们的模型中，CC 从节点本身及其邻居的角度获取节点信息，从而提高了节点识别的全面性。</p>
-
-        <h3>向心力模型</h3>
-        <p style="text-align: left;">与许多从其他学科领域的概念中衍生出来的中心度测量方法一样，所提议的方法从向心力公式中获得灵感，该公式计算物体沿圆或弯曲轨道运动时，指向圆心（曲率中心）的总外力。向心力公式由物体质量 m、圆周运动周期 T 和运动半径 r 定义：</p>
-        <p>\( CenC(i)=\sum\limits_{j\in\Gamma_{im}}4\pi^2 \frac{\big(e^{k_i \alpha}+C_{i}^{-1} \big)}{d_{ij}^2} \beta {ks}_j \)</p>
-
-
-        <h3>向心力中心性</h3>
-        <p style="text-align: left;">受上述公式的启发，我们提出了向心度来衡量节点对其邻居的吸引力，将节点的度数指数与约束系数的倒数之和作为质量，相邻两个节点之间的距离作为周期，k-shell 的值作为半径。以上三个指标分别从全局、半局部和局部属性来评价节点的重要性。在本课题中，节点 i 的向心度定义为：</p>
-        <p>\( \alpha=\frac{|V|}{\big[ |V| \big]} \)</p>
-        <p style="text-align: left;">其中\( \big[ |V| \big] \)是网络的数量级。
-
-        <h3>平衡系数</h3>
-        <p style="text-align: left;">我们引入自然对数 e 和参数作为平衡系数，旨在避免过高估计节点代表质量的自我重要性。考虑到对于不同规模的网络，节点程度所包含信息的重要性是不同的，我们将参数设置为与网络规模相关的值。为了统一不同网络的规模，我们选择了十进制规模归一化技术来确定 。参数 α 的具体定义如下</p>
-        <p>\( \beta = \frac{1}{\big(  |{ks}_i - {ks}_j| +1 \big)} \)</p>
-
-        <h3>邻居节点的重要性</h3>
-        <p style="text-align: left;">当节点的影响力在相距不超过三个跳的邻居节点之间传播时，会随着距离的增加而不断衰减，当传播距离超过三个跳时，影响力几乎消失。也就是说，影响传播遵循三度分隔原则。这与 Chrisakis 提出的三度影响力规则完全一致。因此，在计算节点的重要性时，我们会考虑最近的邻居、下一个最近的邻居和下下一个最近的邻居。该参数的目的是调整邻居节点的重要性。邻居节点的影响力应与邻居节点的顺序有关。三阶邻居节点的影响力弱于二阶邻居节点。基于上述，该参数定义为:</p>
-        <p>\( CenC(i)=\sum\limits_{j\in\Gamma_{im}}4\pi^2 \frac{\big(e^{k_i \alpha}+C_{i}^{-1} \big)}{d_{ij}^2} \frac{ks_i}{\big(  |{ks}_i - {ks}_j| +1 \big)} \)</p>
-
-      
-
-
-    </div>
 
 
 

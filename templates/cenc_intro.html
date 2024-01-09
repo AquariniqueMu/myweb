@@ -1,0 +1,291 @@
+<!--
+ * @Description: 
+ * @Author: Junwen Yang
+ * @Date: 2023-11-06 10:33:16
+ * @LastEditTime: 2023-11-14 02:42:41
+ * @LastEditors: Junwen Yang
+-->
+<!--
+ * @Description: 
+ * @Author: Junwen Yang
+ * @Date: 2023-11-06 10:33:16
+ * @LastEditTime: 2023-11-06 16:11:14
+ * @LastEditors: Junwen Yang
+-->
+<!--
+ * @Description: 
+ * @Author: Junwen Yang
+ * @Date: 2023-11-06 10:33:16
+ * @LastEditTime: 2023-11-06 15:51:01
+ * @LastEditors: Junwen Yang
+-->
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="/static/scripts/main.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Node Importance Analysis</title>
+    <link rel="stylesheet" href="../static/styles/main.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_HTML"></script>
+
+    <style>
+
+        .sidebar {
+            position:absolute;
+            top: 0;
+            left: -250px; /* Hide sidebar */
+            height: 100%;
+            background: #333;
+            overflow-x: hidden;
+            transition: 0.5s; /* Smooth transition */
+            padding-top: 60px;
+        }
+        .sidebar:hover {
+            left: 0; /* Show sidebar on hover */
+        }
+        .latex-chinese-content {
+            
+            border-radius: 10px;
+            border: 1.2px solid #ccc;
+            padding: 20px;
+            margin: 30px auto;
+            max-width: 1200px;
+            height: 1200px;
+            margin-left: 320px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            shadow:  0 5px 10px rgba(0, 0, 0, 0.5); /* 添加阴影效果 */ 
+        }
+        
+        .latex-chinese-content h2 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .latex-chinese-content h3 {
+            font-style: italic;
+        }
+
+        .latex-chinese-content h4 {
+            font-size: 1.2em;
+        }
+        
+        .latex-chinese-content p {
+            font-size: 1.1em;
+            line-height: 1.6;
+            text-indent: 2em; /* 段落首行缩进两个中文字符 */
+            color: #666;
+        }
+        
+        .menu-icon {
+            cursor: pointer;
+            position: absolute;
+            margin-left: 12%;
+            transition: 0.5s;
+            margin-top: -1vh;
+            top: 20px;
+            left: 10px;
+            width: 40px;
+            height: 40px;
+            /* background: url('path/to/menu-icon.png') no-repeat center center; */
+            /* background-size: cover; */
+            font-size: 20px;
+        }
+        .menu-icon.open {
+            left: -210px; /* Move to the right by the width of the sidebar */
+        }
+        /* Add padding to the body to make space for the fixed menu icon */
+        body {
+            
+            padding-top: 60px;
+
+            
+        }
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 20px;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            margin-left: 100px;
+            justify-content: space-between; /* 确保元素之间有空间 */
+        }
+
+        .bg {
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+            padding: 0px;
+            width: 300px;
+            /* margin: 100px; 为了简化，这里使用统一的边距 */
+            height: 150px;
+            /* 按照两行三列排序 */
+            
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions for hover effects */
+        }
+
+        .bg:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .content-section {
+            position: relative;
+            margin: 60px 30px;
+            
+            /* max-width: 800px;  */
+            text-align: justify;
+            padding: 30px;
+            
+            margin-left: 200px;
+            margin-right: -400px;
+            /* 缩小content-section元素的间距 */
+            
+            
+        }
+        .content-section + .content-section {
+            margin-right: 50px;
+            margin-left: 450px;
+   
+        }
+
+        .content-section + .content-section + .content-section {
+            margin-left:    0px;
+            margin-right: 100px;
+            
+        }
+
+        .content-section h2 {
+            text-align: center;
+            margin-bottom: 10px;
+            margin-top: -10px;
+            font-size: 1.2em;
+        }
+
+        .content-section p {
+            font-size: 0.8em;
+            line-height: 1.6; /* For readability */
+        }
+
+        /* Title Styles */
+        h1 {
+            font-family: 'Roboto', sans-serif; /* This is a modern and clean font */
+            font-weight: 700; /* Make it bold */
+            font-size: 2.5em; /* Increase the size */
+            color: #333; /* Dark grey color */
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2); /* Subtle text shadow for depth */
+            animation: fadeInDown 2s ease-out;
+            margin-bottom: 0.5em;
+            margin-left: 200px;
+            margin-top: 0em;
+        }
+
+        /* Keyframes for the title animation */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translate3d(0, -100%, 0);
+            }
+            to {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    
+    <nav id="sidebar", class="sidebar">
+        
+        <ul>
+            <li><a href="/crawl-information">Crawl Information</a>
+                <ul>
+                    <li><a href="/search_weibo">Search Weibo</a></li>
+                    
+                </ul>
+            </li>
+            <li><a href="/dissemination-network">Dissemination Network</a>
+                <ul>
+                    <li><a href="/edgesdata">Edges Data</a></li>
+                    <li><a href="/nettopo">Network Topo</a></li>
+                </ul>
+                
+            </li>
+            <li><a href="/key-spreader-analysis">Key Spreader Analysis</a>
+                <ul>
+                    <li><a href="/degree">Degree</a></li>
+                    <li><a href="/betweenness">Betweenness</a></li>
+                    <li><a href="/closeness">Closeness</a></li>
+                    <li><a href="/centripetal">Centripetal</a></li>
+                    <li><a href="/top10">Top Nodes Simulate</a></li>
+                </ul>
+            </li>
+            <li><a href="/emotionnetwork">Emotion Analysis</a>
+                <ul>
+                    <li><a href="/sentimentanalysis">Emotion Analysis</a></li>
+                    <li><a href="/sentimentspread">Emotion Spread</a></li>
+                    
+        </ul>
+    </nav>
+    
+    <main>
+        <img src="/static/img/cenc.png" style="float: bottom; border: 2px solid #000; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); margin-left: 190px; margin-bottom: 60px; width: 500px; margin-top: 0px;">
+        <!-- Main Title -->
+        <h1>向心力中心性</h1>
+        <div class="menu-icon" onclick="toggleSidebar() ">&#9776;MENU</div>
+        <div class="container">
+        <!-- Section: Degree Centrality -->
+        
+    </div>
+    
+        <!-- Additional sections can be added here -->
+    </main>
+    
+    <script src="scripts/main.js"></script>
+   
+
+    <!-- LaTeX 公式和中文内容的部分 -->
+    <div class="latex-chinese-content">
+        
+
+        <h2>Identifying influential nodes in social networks: centripetal centrality and seed exclusion approach</h2>
+        <h2>识别社交网络中的影响力节点：向心力中心性和种子节点排除法</h2>
+        <h3 style="text-align: center;">Chaos, Solitons & Fractals</h3>
+        <p style="text-align: center;">Yan Wang, Haozhan Li, Ling Zhang, Linlin Zhao, Wanlan Li</p>
+        <p style="text-align: left;"> 节点的影响力是指节点传播信息的能力，由于信息传播取决于特定网络的特征，因此网络结构必然会对信息传播过程产生影响，而信息传播过程又会影响节点的重要性。鉴于节点的影响力可以从多个网络拓扑维度来描述，因此对于提高系统的准确性非常重要，我们提出了一种整合全局、局部和半局部指标的方法--向心度（CenC）。在我们的模型中，CenC 从节点本身及其邻居的角度获取节点信息，从而提高了节点识别的全面性。</p>
+
+        <h4>向心力模型</h4>
+        <p style="text-align: left;">与许多从其他学科领域的概念中衍生出来的中心度测量方法一样，所提议的方法从向心力公式中获得灵感，该公式计算物体沿圆或弯曲轨道运动时，指向圆心（曲率中心）的总外力。向心力公式由物体质量 m、圆周运动周期 T 和运动半径 r 定义：</p>
+        <p>\( CenC(i)=\sum\limits_{j\in\Gamma_{im}}4\pi^2 \frac{\big(e^{k_i \alpha}+C_{i}^{-1} \big)}{d_{ij}^2} \beta {ks}_j \)</p>
+
+
+        <h4>向心力中心性</h4>
+        <p style="text-align: left;">受上述公式的启发，我们提出了向心度来衡量节点对其邻居的吸引力，将节点的度数指数与约束系数的倒数之和作为质量，相邻两个节点之间的距离作为周期，k-shell 的值作为半径。以上三个指标分别从全局、半局部和局部属性来评价节点的重要性。在本课题中，节点 i 的向心度定义为：</p>
+        <p>\( \alpha=\frac{|V|}{\big[ |V| \big]} \)</p>
+        <p style="text-align: left;">其中\( \big[ |V| \big] \)是网络的数量级。
+
+        <h4>平衡系数</h4>
+        <p style="text-align: left;">我们引入自然对数 e 和参数作为平衡系数，旨在避免过高估计节点代表质量的自我重要性。考虑到对于不同规模的网络，节点程度所包含信息的重要性是不同的，我们将参数设置为与网络规模相关的值。为了统一不同网络的规模，我们选择了十进制规模归一化技术来确定 。参数 α 的具体定义如下</p>
+        <p>\( \beta = \frac{1}{\big(  |{ks}_i - {ks}_j| +1 \big)} \)</p>
+
+        <h4>邻居节点的重要性</h4>
+        <p style="text-align: left;">当节点的影响力在相距不超过三个跳的邻居节点之间传播时，会随着距离的增加而不断衰减，当传播距离超过三个跳时，影响力几乎消失。也就是说，影响传播遵循三度分隔原则。这与 Chrisakis 提出的三度影响力规则完全一致。因此，在计算节点的重要性时，我们会考虑最近的邻居、下一个最近的邻居和下下一个最近的邻居。该参数的目的是调整邻居节点的重要性。邻居节点的影响力应与邻居节点的顺序有关。三阶邻居节点的影响力弱于二阶邻居节点。基于上述，该参数定义为:</p>
+        <p>\( CenC(i)=\sum\limits_{j\in\Gamma_{im}}4\pi^2 \frac{\big(e^{k_i \alpha}+C_{i}^{-1} \big)}{d_{ij}^2} \frac{ks_i}{\big(  |{ks}_i - {ks}_j| +1 \big)} \)</p>
+
+      
+        
+
+    </div>
+
+
+
+</body>
+</html>

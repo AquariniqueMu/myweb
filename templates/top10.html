@@ -99,7 +99,7 @@
             .menu-icon {
                 cursor: pointer;
                 position: absolute;
-                margin-left: 30vh;
+                margin-left: 12%;
                 transition: 0.5s;
                 margin-top: -1vh;
                 top: 20px;
@@ -108,9 +108,10 @@
                 height: 40px;
                 /* background: url('path/to/menu-icon.png') no-repeat center center; */
                 /* background-size: cover; */
+                font-size: 20px;
             }
             .menu-icon.open {
-                left: -250px; /* Move to the right by the width of the sidebar */
+                left: -200px; /* Move to the right by the width of the sidebar */
             }
             /* Add padding to the body to make space for the fixed menu icon */
             body {
@@ -188,6 +189,7 @@
                 <option value="stormofswords">stormofswords</option>
                 <option value="blogs">blogs</option>
                 <option value="email">email</option>
+                <option value="weibo">Weibo</option>
             </select>
 
             <select id="infection-rate">
@@ -254,6 +256,11 @@
             <p style="font-size: 14px; color: #555;">为了对比不同方法选择的节点在传播效果上的差异，我们用SIR模型对传播过程进行模拟。选择前K个节点作为初始感染节点，计算达到稳态后网络中的总传播规模，即可表征这一组节点的传播能力。</p>
         </div>
             <button class="simu-button" id="start-simulation">Simulate</button>
+            <div id="progress-bar-container" style="width: 750px; position:absolute;">
+                <div id="progress-bar" style="height: 50x; width: 0;">
+                    <span id="progress-bar-percentage" style="color: black; position: absolute; width: 100%; text-align: center;">0%</span>
+                </div>
+            </div>
             <div id="sir-chart-container" class="chart"></div>
             <!-- 加入一段空白 -->
             <div id="space" style="width: 650px;height:80px;"></div>

@@ -33,7 +33,7 @@
         .menu-icon {
             cursor: pointer;
             position: absolute;
-            margin-left: 30vh;
+            margin-left: 12%;
             transition: 0.5s;
             margin-top: -1vh;
             top: 20px;
@@ -42,9 +42,10 @@
             height: 40px;
             /* background: url('path/to/menu-icon.png') no-repeat center center; */
             /* background-size: cover; */
+            font-size: 20px;
         }
         .menu-icon.open {
-            left: -250px; /* Move to the right by the width of the sidebar */
+            left: -210px; /* Move to the right by the width of the sidebar */
         }
         /* Add padding to the body to make space for the fixed menu icon */
         body {
@@ -88,14 +89,19 @@
     <div id="input-content">
         <div id="search-container">
             <h1>Search Weibo</h1>
-            <p>这部分页面实现对微博转发网络的爬取功能</p>
-            <p>在下方输入微博ID即可开始获取信息</p>
-            <input type="text" id="search-input" style="width:240%;">
+            <p>这部分页面实现对微博转发网络的爬取功能,在下方输入微博ID即可开始获取信息</p>
+            <input type="text" id="search-input" style="width:200%;">
             <button id="search-btn">Crawl Weibos</button>
             <button id="download-btn">Download</button>
-
+            
             
         </div>
+        <div id="progress-bar-container" style="width: 750px; position:absolute;">
+            <div id="progress-bar" style="height: 50x; width: 0;">
+                <span id="progress-bar-percentage" style="color: black; position: absolute; width: 100%; text-align: center;">0%</span>
+            </div>
+        </div>
+        
         
         <!-- 此部分放在<body>标签内 -->
         <div id="table-container" class="table-responsive">
